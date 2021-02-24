@@ -13,6 +13,11 @@ as
     l_url             p_dynamic_action.attribute_02%type := p_dynamic_action.attribute_02;
     l_plsql_expr      p_dynamic_action.attribute_03%type := p_dynamic_action.attribute_03;
     l_prepare_url     BOOLEAN                            := nvl(p_dynamic_action.attribute_09, 'Y') = 'Y';
+
+    -- triggering element that is invoking redirect.
+    -- use this so relevant Dialog Closed actions will execute
+    l_triggering_element    varchar2(4000)                           := p_dynamic_action.attribute_11;
+
 begin
 
     if l_url_source = 'plsql-expression' then
@@ -29,7 +34,10 @@ begin
     end if;
 
     if l_prepare_url then
-        l_url := apex_util.prepare_url(l_url, 'SESSION');
+        l_url := apex_util.prepare_url
+           (l_url
+           ,p_checksum_type => 'SESSION'
+           ,p_triggering_element => l_triggering_element);
     end if;
 
     return l_url;
