@@ -63,7 +63,7 @@ end;
 prompt --application/shared_components/plugins/dynamic_action/com_fos_redirect
 begin
 wwv_flow_api.create_plugin(
- p_id=>wwv_flow_api.id(2674568769566617)
+ p_id=>wwv_flow_api.id(60004640115775784)
 ,p_plugin_type=>'DYNAMIC ACTION'
 ,p_name=>'COM.FOS.REDIRECT'
 ,p_display_name=>'FOS - Redirect'
@@ -83,6 +83,10 @@ wwv_flow_api.create_plugin(
 '    l_url             p_dynamic_action.attribute_02%type := p_dynamic_action.attribute_02;',
 '    l_plsql_expr      p_dynamic_action.attribute_03%type := p_dynamic_action.attribute_03;',
 '    l_prepare_url     BOOLEAN                            := nvl(p_dynamic_action.attribute_09, ''Y'') = ''Y'';',
+'',
+'    -- triggering element that is invoking redirect.',
+'    -- use this so relevant Dialog Closed actions will execute',
+'    l_triggering_element    varchar2(4000)                           := p_dynamic_action.attribute_11;',
 'begin',
 '',
 '    if l_url_source = ''plsql-expression'' then',
@@ -99,7 +103,10 @@ wwv_flow_api.create_plugin(
 '    end if;',
 '    ',
 '    if l_prepare_url then',
-'        l_url := apex_util.prepare_url(l_url, ''SESSION'');',
+'        l_url := apex_util.prepare_url',
+'           (l_url',
+'           ,p_checksum_type => ''SESSION''',
+'           ,p_triggering_element => l_triggering_element);',
 '    end if;',
 '    ',
 '    return l_url;',
@@ -233,11 +240,11 @@ wwv_flow_api.create_plugin(
 ,p_plugin_comment=>wwv_flow_string.join(wwv_flow_t_varchar2(
 '@fos-auto-return-to-page',
 '@fos-auto-open-files:js/script.js'))
-,p_files_version=>78
+,p_files_version=>84
 );
 wwv_flow_api.create_plugin_attribute(
- p_id=>wwv_flow_api.id(58073157246273209)
-,p_plugin_id=>wwv_flow_api.id(2674568769566617)
+ p_id=>wwv_flow_api.id(60004865535775676)
+,p_plugin_id=>wwv_flow_api.id(60004640115775784)
 ,p_attribute_scope=>'COMPONENT'
 ,p_attribute_sequence=>1
 ,p_display_sequence=>10
@@ -250,24 +257,24 @@ wwv_flow_api.create_plugin_attribute(
 ,p_help_text=>'<p>Define how the url is obtained e.g. either by "Static Text" or from a "PL/SQL Expression"</p>'
 );
 wwv_flow_api.create_plugin_attr_value(
- p_id=>wwv_flow_api.id(58073681178275644)
-,p_plugin_attribute_id=>wwv_flow_api.id(58073157246273209)
+ p_id=>wwv_flow_api.id(60005181117775637)
+,p_plugin_attribute_id=>wwv_flow_api.id(60004865535775676)
 ,p_display_sequence=>10
 ,p_display_value=>'Static'
 ,p_return_value=>'static'
 ,p_help_text=>'<p>The URL will be defined using static text with page item substitution support.</p>'
 );
 wwv_flow_api.create_plugin_attr_value(
- p_id=>wwv_flow_api.id(58074073188276966)
-,p_plugin_attribute_id=>wwv_flow_api.id(58073157246273209)
+ p_id=>wwv_flow_api.id(60005640090775578)
+,p_plugin_attribute_id=>wwv_flow_api.id(60004865535775676)
 ,p_display_sequence=>20
 ,p_display_value=>'PL/SQL Expression'
 ,p_return_value=>'plsql-expression'
 ,p_help_text=>'<p>The URL will be defined from a PL/SQL expression with page item substitution support within the expression itself and on the result.</p>'
 );
 wwv_flow_api.create_plugin_attribute(
- p_id=>wwv_flow_api.id(2674755418566634)
-,p_plugin_id=>wwv_flow_api.id(2674568769566617)
+ p_id=>wwv_flow_api.id(60006012442775577)
+,p_plugin_id=>wwv_flow_api.id(60004640115775784)
 ,p_attribute_scope=>'COMPONENT'
 ,p_attribute_sequence=>2
 ,p_display_sequence=>20
@@ -275,15 +282,15 @@ wwv_flow_api.create_plugin_attribute(
 ,p_attribute_type=>'LINK'
 ,p_is_required=>true
 ,p_is_translatable=>false
-,p_depending_on_attribute_id=>wwv_flow_api.id(58073157246273209)
+,p_depending_on_attribute_id=>wwv_flow_api.id(60004865535775676)
 ,p_depending_on_has_to_exist=>true
 ,p_depending_on_condition_type=>'EQUALS'
 ,p_depending_on_expression=>'static'
 ,p_help_text=>'<p>The link to the target page or URL.</p>'
 );
 wwv_flow_api.create_plugin_attribute(
- p_id=>wwv_flow_api.id(58074620387285904)
-,p_plugin_id=>wwv_flow_api.id(2674568769566617)
+ p_id=>wwv_flow_api.id(60006466073775528)
+,p_plugin_id=>wwv_flow_api.id(60004640115775784)
 ,p_attribute_scope=>'COMPONENT'
 ,p_attribute_sequence=>3
 ,p_display_sequence=>30
@@ -291,15 +298,15 @@ wwv_flow_api.create_plugin_attribute(
 ,p_attribute_type=>'PLSQL EXPRESSION'
 ,p_is_required=>true
 ,p_is_translatable=>false
-,p_depending_on_attribute_id=>wwv_flow_api.id(58073157246273209)
+,p_depending_on_attribute_id=>wwv_flow_api.id(60004865535775676)
 ,p_depending_on_has_to_exist=>true
 ,p_depending_on_condition_type=>'EQUALS'
 ,p_depending_on_expression=>'plsql-expression'
 ,p_help_text=>'<p>Enter a PL/SQL expression that will return your URL e.g.</p>'
 );
 wwv_flow_api.create_plugin_attribute(
- p_id=>wwv_flow_api.id(58074988798291393)
-,p_plugin_id=>wwv_flow_api.id(2674568769566617)
+ p_id=>wwv_flow_api.id(60006846949775528)
+,p_plugin_id=>wwv_flow_api.id(60004640115775784)
 ,p_attribute_scope=>'COMPONENT'
 ,p_attribute_sequence=>4
 ,p_display_sequence=>40
@@ -311,32 +318,32 @@ wwv_flow_api.create_plugin_attribute(
 ,p_help_text=>'<p>Choose from the available options:</p>'
 );
 wwv_flow_api.create_plugin_attr_value(
- p_id=>wwv_flow_api.id(58075381131309291)
-,p_plugin_attribute_id=>wwv_flow_api.id(58074988798291393)
+ p_id=>wwv_flow_api.id(60007276267775526)
+,p_plugin_attribute_id=>wwv_flow_api.id(60006846949775528)
 ,p_display_sequence=>10
 ,p_display_value=>'Submit Page Items Before Redirect'
 ,p_return_value=>'update-session-state'
 ,p_help_text=>'<p>You can submit any items on the page before performing the redirect. If any of the page items are used in the URL as substitutions, the URL will be updated and (optionally) prepare_url will be called.</p>'
 );
 wwv_flow_api.create_plugin_attr_value(
- p_id=>wwv_flow_api.id(58075776992313263)
-,p_plugin_attribute_id=>wwv_flow_api.id(58074988798291393)
+ p_id=>wwv_flow_api.id(60007772690775525)
+,p_plugin_attribute_id=>wwv_flow_api.id(60006846949775528)
 ,p_display_sequence=>20
 ,p_display_value=>'Execute PL/SQL Before Redirect'
 ,p_return_value=>'execute-plsql'
 ,p_help_text=>'<p>You can choose to submit any items on the page and execute some PL/SQL logic before performing the redirect. If any of the page items are used in the URL as substitutions, the URL will be updated and (optionally) prepare_url will be called.</p>'
 );
 wwv_flow_api.create_plugin_attr_value(
- p_id=>wwv_flow_api.id(58076753670341881)
-,p_plugin_attribute_id=>wwv_flow_api.id(58074988798291393)
+ p_id=>wwv_flow_api.id(60008285571775525)
+,p_plugin_attribute_id=>wwv_flow_api.id(60006846949775528)
 ,p_display_sequence=>30
 ,p_display_value=>'[for Modal Dialogs] Redirect Parent Page'
 ,p_return_value=>'redirect-parent'
 ,p_help_text=>'<p>Check this option when you are using this action on a modal dialog page and you want to redirect the main page, and not redirect the page open in the dialog.</p>'
 );
 wwv_flow_api.create_plugin_attribute(
- p_id=>wwv_flow_api.id(58076109914324218)
-,p_plugin_id=>wwv_flow_api.id(2674568769566617)
+ p_id=>wwv_flow_api.id(60008719102775524)
+,p_plugin_id=>wwv_flow_api.id(60004640115775784)
 ,p_attribute_scope=>'COMPONENT'
 ,p_attribute_sequence=>5
 ,p_display_sequence=>50
@@ -344,15 +351,15 @@ wwv_flow_api.create_plugin_attribute(
 ,p_attribute_type=>'PLSQL'
 ,p_is_required=>true
 ,p_is_translatable=>false
-,p_depending_on_attribute_id=>wwv_flow_api.id(58074988798291393)
+,p_depending_on_attribute_id=>wwv_flow_api.id(60006846949775528)
 ,p_depending_on_has_to_exist=>true
 ,p_depending_on_condition_type=>'EQUALS'
 ,p_depending_on_expression=>'execute-plsql'
 ,p_help_text=>'<p>Enter the PL/SQL code you would like to execute before the redirect occurs.</p>'
 );
 wwv_flow_api.create_plugin_attribute(
- p_id=>wwv_flow_api.id(58076467026327837)
-,p_plugin_id=>wwv_flow_api.id(2674568769566617)
+ p_id=>wwv_flow_api.id(60009133528775523)
+,p_plugin_id=>wwv_flow_api.id(60004640115775784)
 ,p_attribute_scope=>'COMPONENT'
 ,p_attribute_sequence=>6
 ,p_display_sequence=>60
@@ -360,7 +367,7 @@ wwv_flow_api.create_plugin_attribute(
 ,p_attribute_type=>'PAGE ITEMS'
 ,p_is_required=>false
 ,p_is_translatable=>false
-,p_depending_on_attribute_id=>wwv_flow_api.id(58074988798291393)
+,p_depending_on_attribute_id=>wwv_flow_api.id(60006846949775528)
 ,p_depending_on_has_to_exist=>true
 ,p_depending_on_condition_type=>'IN_LIST'
 ,p_depending_on_expression=>'update-session-state,execute-plsql'
@@ -370,8 +377,8 @@ wwv_flow_api.create_plugin_attribute(
 'If you pick from the list and there is already text entered then a comma is placed at the end of the existing text, followed by the item name returned from the list.</p>'))
 );
 wwv_flow_api.create_plugin_attribute(
- p_id=>wwv_flow_api.id(58077259426381019)
-,p_plugin_id=>wwv_flow_api.id(2674568769566617)
+ p_id=>wwv_flow_api.id(60009529679775523)
+,p_plugin_id=>wwv_flow_api.id(60004640115775784)
 ,p_attribute_scope=>'COMPONENT'
 ,p_attribute_sequence=>7
 ,p_display_sequence=>70
@@ -380,7 +387,7 @@ wwv_flow_api.create_plugin_attribute(
 ,p_is_required=>true
 ,p_default_value=>'parent'
 ,p_is_translatable=>false
-,p_depending_on_attribute_id=>wwv_flow_api.id(58074988798291393)
+,p_depending_on_attribute_id=>wwv_flow_api.id(60006846949775528)
 ,p_depending_on_has_to_exist=>true
 ,p_depending_on_condition_type=>'IN_LIST'
 ,p_depending_on_expression=>'redirect-parent'
@@ -389,24 +396,24 @@ wwv_flow_api.create_plugin_attribute(
 ||'ong> It''s most likely that top = parent in the majority of cases.</p>'
 );
 wwv_flow_api.create_plugin_attr_value(
- p_id=>wwv_flow_api.id(58077744861381948)
-,p_plugin_attribute_id=>wwv_flow_api.id(58077259426381019)
+ p_id=>wwv_flow_api.id(60009939069775523)
+,p_plugin_attribute_id=>wwv_flow_api.id(60009529679775523)
 ,p_display_sequence=>10
 ,p_display_value=>'Parent Page'
 ,p_return_value=>'parent'
 ,p_help_text=>'<p>You can choose to redirect the <strong>parent</strong> page i.e. the one that opened the dialog.</p>'
 );
 wwv_flow_api.create_plugin_attr_value(
- p_id=>wwv_flow_api.id(58078152214382792)
-,p_plugin_attribute_id=>wwv_flow_api.id(58077259426381019)
+ p_id=>wwv_flow_api.id(60010455692775522)
+,p_plugin_attribute_id=>wwv_flow_api.id(60009529679775523)
 ,p_display_sequence=>20
 ,p_display_value=>'Top Page'
 ,p_return_value=>'top'
 ,p_help_text=>'<p>You can choose to redirect the <strong>top</strong> level document i.e. if you have multiple dialogs open.</p>'
 );
 wwv_flow_api.create_plugin_attribute(
- p_id=>wwv_flow_api.id(58078750721392452)
-,p_plugin_id=>wwv_flow_api.id(2674568769566617)
+ p_id=>wwv_flow_api.id(60010966653775522)
+,p_plugin_id=>wwv_flow_api.id(60004640115775784)
 ,p_attribute_scope=>'COMPONENT'
 ,p_attribute_sequence=>8
 ,p_display_sequence=>80
@@ -415,15 +422,15 @@ wwv_flow_api.create_plugin_attribute(
 ,p_is_required=>false
 ,p_default_value=>'N'
 ,p_is_translatable=>false
-,p_depending_on_attribute_id=>wwv_flow_api.id(58074988798291393)
+,p_depending_on_attribute_id=>wwv_flow_api.id(60006846949775528)
 ,p_depending_on_has_to_exist=>true
 ,p_depending_on_condition_type=>'NOT_IN_LIST'
 ,p_depending_on_expression=>'redirect-parent'
 ,p_help_text=>'<p>Choose this option when you want the URL to be opened in a new browser window/tab depending upon the default behaviour of the browser.</p> '
 );
 wwv_flow_api.create_plugin_attribute(
- p_id=>wwv_flow_api.id(60219192441184159)
-,p_plugin_id=>wwv_flow_api.id(2674568769566617)
+ p_id=>wwv_flow_api.id(60011306858775522)
+,p_plugin_id=>wwv_flow_api.id(60004640115775784)
 ,p_attribute_scope=>'COMPONENT'
 ,p_attribute_sequence=>9
 ,p_display_sequence=>35
@@ -437,8 +444,8 @@ wwv_flow_api.create_plugin_attribute(
 '<p>You would most likely disable this option in the circumstance that APEX_UTIL.PREPARE_URL has already been called in your PL/SQL expression that returns the URL.</p>'))
 );
 wwv_flow_api.create_plugin_attribute(
- p_id=>wwv_flow_api.id(60224642949364100)
-,p_plugin_id=>wwv_flow_api.id(2674568769566617)
+ p_id=>wwv_flow_api.id(60011749363775521)
+,p_plugin_id=>wwv_flow_api.id(60004640115775784)
 ,p_attribute_scope=>'COMPONENT'
 ,p_attribute_sequence=>10
 ,p_display_sequence=>65
@@ -447,15 +454,35 @@ wwv_flow_api.create_plugin_attribute(
 ,p_is_required=>false
 ,p_default_value=>'Y'
 ,p_is_translatable=>false
-,p_depending_on_attribute_id=>wwv_flow_api.id(58074988798291393)
+,p_depending_on_attribute_id=>wwv_flow_api.id(60006846949775528)
 ,p_depending_on_has_to_exist=>true
 ,p_depending_on_condition_type=>'IN_LIST'
 ,p_depending_on_expression=>'execute-plsql'
 ,p_help_text=>'<p>Enable/toggle this option to show a spinner when you are executing PLSQL prior to performing the page redirect.</p>'
 );
+wwv_flow_api.create_plugin_attribute(
+ p_id=>wwv_flow_api.id(68404548104738326)
+,p_plugin_id=>wwv_flow_api.id(60004640115775784)
+,p_attribute_scope=>'COMPONENT'
+,p_attribute_sequence=>11
+,p_display_sequence=>110
+,p_prompt=>'Triggering Element'
+,p_attribute_type=>'TEXT'
+,p_is_required=>false
+,p_supported_ui_types=>'DESKTOP'
+,p_is_translatable=>false
+,p_depending_on_attribute_id=>wwv_flow_api.id(60011306858775522)
+,p_depending_on_has_to_exist=>true
+,p_depending_on_condition_type=>'EQUALS'
+,p_depending_on_expression=>'Y'
+,p_help_text=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'Return the object used to action the redirect. This is useful when invoking modal dialog, and you need to associate a Dialog Closed action.',
+'<br><br>eg:',
+'<br><code>$(''#search-btn'')</code>'))
+);
 wwv_flow_api.create_plugin_event(
- p_id=>wwv_flow_api.id(70756840937181597)
-,p_plugin_id=>wwv_flow_api.id(2674568769566617)
+ p_id=>wwv_flow_api.id(60014134795775294)
+,p_plugin_id=>wwv_flow_api.id(60004640115775784)
 ,p_name=>'fos-url-redirect-error'
 ,p_display_name=>'FOS - Redirect - Error'
 );
@@ -501,37 +528,9 @@ end;
 /
 begin
 wwv_flow_api.create_plugin_file(
- p_id=>wwv_flow_api.id(58070503030232429)
-,p_plugin_id=>wwv_flow_api.id(2674568769566617)
+ p_id=>wwv_flow_api.id(60014468891775270)
+,p_plugin_id=>wwv_flow_api.id(60004640115775784)
 ,p_file_name=>'js/script.js'
-,p_mime_type=>'application/javascript'
-,p_file_charset=>'utf-8'
-,p_file_content=>wwv_flow_api.varchar2_to_blob(wwv_flow_api.g_varchar2_table)
-);
-end;
-/
-begin
-wwv_flow_api.g_varchar2_table := wwv_flow_api.empty_varchar2_table;
-wwv_flow_api.g_varchar2_table(1) := '76617220464F533D77696E646F772E464F537C7C7B7D3B464F532E7574696C733D77696E646F772E464F532E7574696C737C7C7B7D2C464F532E7574696C732E6E617669676174696F6E3D66756E6374696F6E28652C6E297B76617220693D746869733B';
-wwv_flow_api.g_varchar2_table(2) := '617065782E64656275672E696E666F2822464F53202D205265646972656374222C6E292C692E72656469726563743D66756E6374696F6E2865297B766172206E3D77696E646F775B652E636F6E746578745D3B21303D3D3D652E6E657757696E646F773F';
-wwv_flow_api.g_varchar2_table(3) := '6E2E617065782E6E617669676174696F6E2E6F70656E496E4E657757696E646F7728652E75726C293A6E2E617065782E6E617669676174696F6E2E726564697265637428652E75726C297D2C692E616A617852656469726563743D66756E6374696F6E28';
-wwv_flow_api.g_varchar2_table(4) := '652C6E297B76617220722C742C6F2C612C643D7B7D2C733D652E7370696E6E657253657474696E67733B652E6974656D73546F5375626D6974262628642E706167654974656D733D652E6974656D73546F5375626D6974292C732E73686F775370696E6E';
-wwv_flow_api.g_varchar2_table(5) := '6572262628732E7370696E6E6572456C656D656E743D732E73686F775370696E6E65724F6E526567696F6E3F6166456C656D656E74733A22626F6479222C743D732E7370696E6E6572456C656D656E742C6F3D732E73686F775370696E6E65724F766572';
-wwv_flow_api.g_varchar2_table(6) := '6C61792C613D22626F6479223D3D742C723D66756E6374696F6E2865297B766172206E2C693D617065782E7574696C2E73686F775370696E6E657228742C7B66697865643A617D293B72657475726E206F2626286E3D2428273C64697620636C6173733D';
-wwv_flow_api.g_varchar2_table(7) := '22666F732D726567696F6E2D6F7665726C6179272B28613F222D6669786564223A2222292B27223E3C2F6469763E27292E70726570656E64546F287429292C66756E6374696F6E28297B6E26266E2E72656D6F766528292C692E72656D6F766528297D7D';
-
-wwv_flow_api.g_varchar2_table(8) := '292C617065782E7365727665722E706C7567696E28652E616A61784964656E7469666965722C642C7B64617461547970653A226A736F6E222C6C6F6164696E67496E64696361746F723A722C7461726765743A6E2E62726F777365724576656E742E7461';
-wwv_flow_api.g_varchar2_table(9) := '726765747D292E646F6E65282866756E6374696F6E2865297B692E72656469726563742865292C617065782E64612E726573756D65286E2E726573756D6543616C6C6261636B2C2131297D29292E6361746368282866756E6374696F6E286E297B652E65';
-wwv_flow_api.g_varchar2_table(10) := '72726F723D6E2C617065782E6576656E742E7472696767657228646F63756D656E742E626F64792C22666F732D75726C2D72656469726563742D6572726F72222C65297D29297D2C695B6E2E6974656D73546F5375626D69747C7C6E2E65786563757465';
-wwv_flow_api.g_varchar2_table(11) := '506C73716C3F22616A61785265646972656374223A227265646972656374225D286E2C65297D3B0A2F2F2320736F757263654D617070696E6755524C3D7363726970742E6A732E6D6170';
-null;
-end;
-/
-begin
-wwv_flow_api.create_plugin_file(
- p_id=>wwv_flow_api.id(58081986561659758)
-,p_plugin_id=>wwv_flow_api.id(2674568769566617)
-,p_file_name=>'js/script.min.js'
 ,p_mime_type=>'application/javascript'
 ,p_file_charset=>'utf-8'
 ,p_file_content=>wwv_flow_api.varchar2_to_blob(wwv_flow_api.g_varchar2_table)
@@ -563,10 +562,37 @@ end;
 /
 begin
 wwv_flow_api.create_plugin_file(
- p_id=>wwv_flow_api.id(58082309352659759)
-,p_plugin_id=>wwv_flow_api.id(2674568769566617)
+ p_id=>wwv_flow_api.id(60014843043775259)
+,p_plugin_id=>wwv_flow_api.id(60004640115775784)
 ,p_file_name=>'js/script.js.map'
 ,p_mime_type=>'application/json'
+,p_file_charset=>'utf-8'
+,p_file_content=>wwv_flow_api.varchar2_to_blob(wwv_flow_api.g_varchar2_table)
+);
+end;
+/
+begin
+wwv_flow_api.g_varchar2_table := wwv_flow_api.empty_varchar2_table;
+wwv_flow_api.g_varchar2_table(1) := '76617220464F533D77696E646F772E464F537C7C7B7D3B464F532E7574696C733D77696E646F772E464F532E7574696C737C7C7B7D2C464F532E7574696C732E6E617669676174696F6E3D66756E6374696F6E28652C6E297B76617220693D746869733B';
+wwv_flow_api.g_varchar2_table(2) := '617065782E64656275672E696E666F2822464F53202D205265646972656374222C6E292C692E72656469726563743D66756E6374696F6E2865297B766172206E3D77696E646F775B652E636F6E746578745D3B21303D3D3D652E6E657757696E646F773F';
+wwv_flow_api.g_varchar2_table(3) := '6E2E617065782E6E617669676174696F6E2E6F70656E496E4E657757696E646F7728652E75726C293A6E2E617065782E6E617669676174696F6E2E726564697265637428652E75726C297D2C692E616A617852656469726563743D66756E6374696F6E28';
+wwv_flow_api.g_varchar2_table(4) := '652C6E297B76617220722C742C6F2C612C643D7B7D2C733D652E7370696E6E657253657474696E67733B652E6974656D73546F5375626D6974262628642E706167654974656D733D652E6974656D73546F5375626D6974292C732E73686F775370696E6E';
+wwv_flow_api.g_varchar2_table(5) := '6572262628732E7370696E6E6572456C656D656E743D732E73686F775370696E6E65724F6E526567696F6E3F6166456C656D656E74733A22626F6479222C743D732E7370696E6E6572456C656D656E742C6F3D732E73686F775370696E6E65724F766572';
+wwv_flow_api.g_varchar2_table(6) := '6C61792C613D22626F6479223D3D742C723D66756E6374696F6E2865297B766172206E2C693D617065782E7574696C2E73686F775370696E6E657228742C7B66697865643A617D293B72657475726E206F2626286E3D2428273C64697620636C6173733D';
+wwv_flow_api.g_varchar2_table(7) := '22666F732D726567696F6E2D6F7665726C6179272B28613F222D6669786564223A2222292B27223E3C2F6469763E27292E70726570656E64546F287429292C66756E6374696F6E28297B6E26266E2E72656D6F766528292C692E72656D6F766528297D7D';
+wwv_flow_api.g_varchar2_table(8) := '292C617065782E7365727665722E706C7567696E28652E616A61784964656E7469666965722C642C7B64617461547970653A226A736F6E222C6C6F6164696E67496E64696361746F723A722C7461726765743A6E2E62726F777365724576656E742E7461';
+wwv_flow_api.g_varchar2_table(9) := '726765747D292E646F6E65282866756E6374696F6E2865297B692E72656469726563742865292C617065782E64612E726573756D65286E2E726573756D6543616C6C6261636B2C2131297D29292E6361746368282866756E6374696F6E286E297B652E65';
+wwv_flow_api.g_varchar2_table(10) := '72726F723D6E2C617065782E6576656E742E7472696767657228646F63756D656E742E626F64792C22666F732D75726C2D72656469726563742D6572726F72222C65297D29297D2C695B6E2E6974656D73546F5375626D69747C7C6E2E65786563757465';
+wwv_flow_api.g_varchar2_table(11) := '506C73716C3F22616A61785265646972656374223A227265646972656374225D286E2C65297D3B0A2F2F2320736F757263654D617070696E6755524C3D7363726970742E6A732E6D6170';
+null;
+end;
+/
+begin
+wwv_flow_api.create_plugin_file(
+ p_id=>wwv_flow_api.id(60015266386775259)
+,p_plugin_id=>wwv_flow_api.id(60004640115775784)
+,p_file_name=>'js/script.min.js'
+,p_mime_type=>'application/javascript'
 ,p_file_charset=>'utf-8'
 ,p_file_content=>wwv_flow_api.varchar2_to_blob(wwv_flow_api.g_varchar2_table)
 );
@@ -580,5 +606,3 @@ end;
 /
 set verify on feedback on define on
 prompt  ...done
-
-
